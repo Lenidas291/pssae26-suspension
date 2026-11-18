@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PSSAE26 Aetheria · Sistema Interactivo de Suspensión</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/aetheria-suspension.css" />
+</head>
+<body>
+
+  <!-- Capa Global de Scanlines Estilo NieR:Automata -->
+  <div class="nier-scanlines"></div>
+
+  <!-- ========================================================================
+       FONDO ANIMADO CON LAS 5 FOTOGRAFÍAS REALES DEL PSSAE26 AETHERIA
+       ======================================================================== -->
+  <div class="animated-car-bg" id="animatedCarBg">
+    <div class="car-bg-slide active" style="background-image: url('assets/car/aetheria_side.jpg');"></div>
+    <div class="car-bg-slide" style="background-image: url('assets/car/aetheria_front.jpg');"></div>
+    <div class="car-bg-slide" style="background-image: url('assets/car/aetheria_top_susp.jpg');"></div>
+    <div class="car-bg-slide" style="background-image: url('assets/car/aetheria_nose_side.jpg');"></div>
+    <div class="car-bg-slide" style="background-image: url('assets/car/aetheria_wing_iso.jpg');"></div>
+    <div class="car-bg-vignette"></div>
+    <div class="nier-geo-circle"></div>
+  </div>
+
+  <!-- ========================================================================
+       PANTALLA 1: MENÚ PRINCIPAL (SOLO SUSPENSIÓN HABILITADO POR AHORA)
+       ======================================================================== -->
+  <section class="app-screen active" id="screenMainMenu">
+    <header class="nier-hud-top">
+      <span>// SYSTEM: POLITÉCNICO SCUDERÍA SAE · PSSAE26 AETHERIA</span>
+      <span>UNIT_88 // STATUS: ONLINE</span>
+    </header>
+
+    <div class="nier-menu-stage">
+      <!-- Columna Izquierda: Botones de Menú Estilo NieR:Automata -->
+      <div>
+        <div class="nier-title-block">
+          <span class="nier-system-tag">// MENÚ DE SISTEMAS · SELECCIÓN DE ÁREA</span>
+          <h1 class="nier-main-heading">PSSAE26 AETHERIA</h1>
+          <div class="nier-sub-heading">"Together, we go further" · Plataforma Interactiva de Ingeniería</div>
+        </div>
+
+        <nav class="nier-menu-list" aria-label="Menú Principal de Sistemas">
+          <button type="button" class="nier-menu-btn" data-nav-target="screenSuspensionHub">
+            <span class="btn-left">
+              <span class="nier-diamond"></span>
+              <span>01 // SUSPENSIÓN</span>
+            </span>
+            <span class="item-status">ACTIVO ▸</span>
+          </button>
+
+          <button type="button" class="nier-menu-btn locked" data-module-name="CHASIS Y ESTRUCTURAS">
+            <span class="btn-left">
+              <span class="nier-diamond"></span>
+              <span>02 // CHASIS Y ESTRUCTURAS</span>
+            </span>
+            <span class="item-status">BLOQUEADO</span>
+          </button>
+
+          <button type="button" class="nier-menu-btn locked" data-module-name="AERODINÁMICA">
+            <span class="btn-left">
+              <span class="nier-diamond"></span>
+              <span>03 // AERODINÁMICA</span>
+            </span>
+            <span class="item-status">BLOQUEADO</span>
+          </button>
+
+          <button type="button" class="nier-menu-btn locked" data-module-name="TREN MOTRIZ / POWERTRAIN">
+            <span class="btn-left">
+              <span class="nier-diamond"></span>
+              <span>04 // TREN MOTRIZ (POWERTRAIN)</span>
+            </span>
+            <span class="item-status">BLOQUEADO</span>
+          </button>
+
+          <button type="button" class="nier-menu-btn locked" data-module-name="ELECTRÓNICA Y TELEMETRÍA">
+            <span class="btn-left">
+              <span class="nier-diamond"></span>
+              <span>05 // ELECTRÓNICA Y CONTROL</span>
+            </span>
+            <span class="item-status">BLOQUEADO</span>
+          </button>
+        </nav>
+
+        <p id="nierSystemNotice" style="font-family:var(--font-mono);font-size:11.5px;color:var(--teal300);margin-top:18px;min-height:20px;">
+          // SELECCIONA [01 // SUSPENSIÓN] PARA INICIAR EL ENTRENAMIENTO.
+        </p>
+      </div>
+
+      <!-- Columna Derecha: Visor Táctico de las Fotografías del PSSAE26 Aetheria -->
+      <aside class="nier-preview-card">
+        <div class="nier-preview-header">
+          <span id="nierShowcaseTitle">VISTA LATERAL · PSSAE26 AETHERIA #88</span>
+          <span>RENDER OFICIAL CAD</span>
+        </div>
+        <div class="nier-car-showcase-frame">
+          <img id="nierShowcaseImg" src="assets/car/aetheria_side.jpg" alt="PSSAE26 Aetheria" />
+        </div>
+        <div class="nier-car-thumbs" id="nierCarThumbs"></div>
+        <p id="nierShowcaseCaption" style="font-family:var(--font-mono);font-size:11.5px;color:#B8CACC;margin:0;">
+          Perfil aerodinámico y batalla (Wheelbase) con librea oficial Ink, Teal y Ciruela.
+        </p>
+      </aside>
+    </div>
+
+    <footer class="nier-hud-bottom">
+      <span>AUTORÍA DE APUNTES Y MENTORÍA: LEONARDO GALEOTE</span>
+      <span>POLITÉCNICO SCUDERÍA SAE · FORMULA SAE</span>
+    </footer>
+  </section>
+
+  <!-- ========================================================================
+       PANTALLA 2: APARTADO DE SUSPENSIÓN
+       ("Estudio-Aprendizaje" habilitado; Reglamento, Memoria y Modelos Anteriores listos)
+       ======================================================================== -->
+  <section class="app-screen" id="screenSuspensionHub">
+    <header class="nier-hud-top">
+      <span>// DIRECTORIO: SISTEMA_01 ➔ SUSPENSIÓN</span>
+      <span>PSSAE26 AETHERIA // UNIDAD DE MENTORÍA</span>
+    </header>
+
+    <div class="nier-menu-stage">
+      <div>
+        <div class="nier-title-block">
+          <span class="nier-system-tag">// SUBSISTEMA SELECCIONADO · 01</span>
+          <h2 class="nier-main-heading">SUSPENSIÓN</h2>
+          <div class="nier-sub-heading">Selecciona el módulo de consulta o entrenamiento interactivo</div>
+        </div>
+
+        <nav class="nier-menu-list" aria-label="Módulos del Apartado de Suspensión">
+          <button type="button" class="nier-menu-btn" data-nav-target="screenStudyTopics">
+            <span class="btn-left">
+              <span class="nier-diamond"></span>
+              <span>ESTUDIO - APRENDIZAJE</span>
+            </span>
+            <span class="item-status">DISPONIBLE ▸</span>
+          </button>
+
+          <button type="button" class="nier-menu-btn locked" data-module-name="REGLAMENTO ENFOCADO A SUSPENSIÓN">
+            <span class="btn-left">
+              <span class="nier-diamond"></span>
+              <span>REGLAMENTO ENFOCADO A SUSPENSIÓN</span>
+            </span>
+            <span class="item-status">PRÓXIMAMENTE</span>
+          </button>
+
+          <button type="button" class="nier-menu-btn locked" data-module-name="MEMORIA DE CÁLCULO">
+            <span class="btn-left">
+              <span class="nier-diamond"></span>
+              <span>MEMORIA DE CÁLCULO</span>
+            </span>
+            <span class="item-status">PRÓXIMAMENTE</span>
+          </button>
+
+          <button type="button" class="nier-menu-btn locked" data-module-name="MODELOS ANTERIORES">
+            <span class="btn-left">
+              <span class="nier-diamond"></span>
+              <span>MODELOS ANTERIORES</span>
+            </span>
+            <span class="item-status">PRÓXIMAMENTE</span>
+          </button>
+        </nav>
+
+        <button type="button" class="nier-back-btn" data-nav-target="screenMainMenu">
+          ◄ VOLVER AL MENÚ PRINCIPAL
+        </button>
+      </div>
+
+      <aside class="nier-preview-card">
+        <div class="nier-preview-header">
+          <span>ARQUITECTURA DE SUSPENSIÓN · PSSAE26 AETHERIA</span>
+          <span>DOBLE HORQUILLA SLA</span>
+        </div>
+        <div class="nier-car-showcase-frame">
+          <img src="assets/car/aetheria_front.jpg" alt="Suspensión Frontal PSSAE26 Aetheria" />
+        </div>
+        <p style="font-size:13.5px;color:#C7D6D8;line-height:1.6;margin:0;">
+          El módulo <strong>Estudio - Aprendizaje</strong> está diseñado para guiar a los nuevos integrantes de la scudería de forma amigable, visual y exacta a través de los fundamentos cinemáticos y dinámicos del monoplaza.
+        </p>
+      </aside>
+    </div>
+
+    <footer class="nier-hud-bottom">
+      <span>BASE DE CONOCIMIENTO: 80% APUNTES LEONARDO GALEOTE · 20% NOTEBOOKLM FSAE</span>
+      <span>ESTADO: ESTUDIO-APRENDIZAJE ACTIVO</span>
+    </footer>
+  </section>
+
+  <!-- ========================================================================
+       PANTALLA 3: ESTUDIO - APRENDIZAJE (ÍNDICE PROGRESIVO DE TEMAS)
+       Primer tema: "Ángulos de Suspensión"
+       ======================================================================== -->
+  <section class="app-screen" id="screenStudyTopics">
+    <header class="nier-hud-top">
+      <span>// DIRECTORIO: SUSPENSIÓN ➔ ESTUDIO - APRENDIZAJE</span>
+      <span>SELECCIÓN DE TEMA</span>
+    </header>
+
+    <div class="nier-menu-stage">
+      <div>
+        <div class="nier-title-block">
+          <span class="nier-system-tag">// RUTA DE APRENDIZAJE PROGRESIVO</span>
+          <h2 class="nier-main-heading">ESTUDIO - APRENDIZAJE</h2>
+          <div class="nier-sub-heading">Temas de diseño de suspensión para nuevos miembros de la scudería</div>
+        </div>
+
+        <nav class="nier-menu-list" aria-label="Temas de Estudio de Suspensión">
+          <button type="button" class="nier-menu-btn" data-nav-target="screenStudyAngles">
+            <span class="btn-left">
+              <span class="nier-diamond"></span>
+              <span>TEMA 01 // ÁNGULOS DE SUSPENSIÓN</span>
+            </span>
+            <span class="item-status">ENTRAR AL SIMULADOR ▸</span>
+          </button>
+
+          <button type="button" class="nier-menu-btn locked" data-module-name="TEMA 02 // DEFINICIÓN DE HARDPOINTS">
+            <span class="btn-left">
+              <span class="nier-diamond"></span>
+              <span>TEMA 02 // DEFINICIÓN DE HARDPOINTS</span>
+            </span>
+            <span class="item-status">EN COLA</span>
+          </button>
+
+          <button type="button" class="nier-menu-btn locked" data-module-name="TEMA 03 // PUSHROD, PULLROD Y MOTION RATIO">
+            <span class="btn-left">
+              <span class="nier-diamond"></span>
+              <span>TEMA 03 // PUSHROD, PULLROD Y MOTION RATIO</span>
+            </span>
+            <span class="item-status">EN COLA</span>
+          </button>
+
+          <button type="button" class="nier-menu-btn locked" data-module-name="TEMA 04 // TRANSFERENCIA DE CARGA Y NEUMÁTICOS">
+            <span class="btn-left">
+              <span class="nier-diamond"></span>
+              <span>TEMA 04 // TRANSFERENCIA DE CARGA Y NEUMÁTICOS</span>
+            </span>
+            <span class="item-status">EN COLA</span>
+          </button>
+        </nav>
+
+        <button type="button" class="nier-back-btn" data-nav-target="screenSuspensionHub">
+          ◄ VOLVER A SUSPENSIÓN
+        </button>
+      </div>
+
+      <aside class="nier-preview-card">
+        <div class="nier-preview-header">
+          <span>TEMA 01 · ÁNGULOS DE SUSPENSIÓN</span>
+          <span>AUTOR: LEONARDO GALEOTE</span>
+        </div>
+        <div class="nier-car-showcase-frame">
+          <img src="assets/car/aetheria_top_susp.jpg" alt="Vista Superior Suspensión PSSAE26 Aetheria" />
+        </div>
+        <p style="font-size:13.5px;color:#C7D6D8;line-height:1.6;margin:0;">
+          Incluye el <strong>Modelo Interactivo a pantalla completa horizontal</strong> con visualización en vivo del movimiento del <em>Instant Center (I.C.)</em> y <em>Roll Center (R.C.)</em> en rolido, seguido de la teoría explicativa, analogías e imágenes (80% Apuntes de Leonardo Galeote y 20% Libros del Cuaderno de Mentorías).
+        </p>
+      </aside>
+    </div>
+
+    <footer class="nier-hud-bottom">
+      <span>TEMA 01 DISPONIBLE: CAMBER · TOE · KPI · SCRUB RADIUS · CASTER · ROLL CENTER · PITCH · ACKERMANN</span>
+      <span>PSSAE26 AETHERIA</span>
+    </footer>
+  </section>
+
+  <!-- ========================================================================
+       PANTALLA 4: TEMA 01 - ÁNGULOS DE SUSPENSIÓN
+       - Barra superior con "SUSPENSION SCHOOL" y los ángulos a un lado (sin barra extra de cámaras)
+       - Parte superior: Modelo Interactivo abarcando TODA la ventana horizontal (libertad para el IC y RC)
+       - Parte inferior: Información explicativa horizontal a lo largo de toda la ventana (80% Apuntes + 20% Libros)
+       ======================================================================== -->
+  <section class="app-screen" id="screenStudyAngles">
+
+    <!-- 1. Barra Superior "SUSPENSION SCHOOL" + Pestañas de Ángulos -->
+    <header class="study-top-bar">
+      <div class="study-top-bar-inner">
+        <button type="button" class="btn-top-return" data-nav-target="screenStudyTopics">
+          ◄ TEMAS
+        </button>
+        <div class="suspension-school-brand">SUSPENSION SCHOOL</div>
+        <nav class="angle-tabs-strip" id="angleTabsStrip" aria-label="Ángulos de Suspensión">
+          <!-- Renderizado dinámico por js/app.js -->
+        </nav>
+      </div>
+    </header>
+
+    <!-- 2. Parte Superior: Modelo Interactivo abarcando TODA la ventana horizontal -->
+    <div class="fullwidth-interactive-section">
+      <div class="interactive-canvas-frame">
+        <div class="canvas-hud-overlay">
+          <span class="canvas-caption-pill" id="canvasTopCaption">
+            Vista Cinemática · PSSAE26 Aetheria
+          </span>
+          <span class="canvas-front-arrow">Front →</span>
+        </div>
+        <canvas id="suspensionCanvas"></canvas>
+      </div>
+
+      <!-- Barra de Telemetría Horizontal (Muestra migración de IC y RC en tiempo real) -->
+      <div class="fullwidth-telemetry-bar" id="fullwidthTelemetryBar"></div>
+
+      <!-- Controles del Modelo Interactivo: Selección de Vehículos + Sliders -->
+      <div class="controls-workbench-grid">
+        <div class="vehicle-selector-box">
+          <div class="box-hud-label">
+            <span>◆ VEHÍCULO / ARQUITECTURA DE COMPARACIÓN</span>
+            <button type="button" class="btn-stock" id="btnBackToStockAll">Back to stock</button>
+          </div>
+          <div class="preset-matrix" id="vehiclePresetMatrix"></div>
+        </div>
+
+        <div class="sliders-horizontal-box">
+          <div class="box-hud-label">
+            <span>◆ PARÁMETROS INTERACTIVOS Y SIMULACIÓN DE ROLIDO / CONDICIONES</span>
+            <span>EL MODELO CAMBIA DE VISTA AUTOMÁTICAMENTE SEGÚN EL ÁNGULO</span>
+          </div>
+          <div class="sliders-grid" id="slidersGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Parte Inferior: Información Explicativa Horizontal a lo largo de TODA la ventana -->
+    <div class="fullwidth-knowledge-section" id="fullwidthKnowledgeSection">
+      <!-- Renderizado dinámico desde js/app.js (80% Apuntes Leonardo Galeote + Analogías/Fotos + 20% Libros) -->
+    </div>
+
+  </section>
+
+  <script src="js/data-vehicles.js"></script>
+  <script src="js/data-curriculum.js"></script>
+  <script src="js/kinematics-engine.js"></script>
+  <script src="js/blueprint-renderer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
